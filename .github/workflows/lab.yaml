@@ -17,3 +17,10 @@ jobs:
       - name: Run Manual Steps
         run: |
           echo "Running manual steps with input: ${{ github.event.inputs.version_semantica }}"
+  deploy:
+    #if: ${{ github.event.pull_request.merged == true && (startsWith(github.event.pull_request.head.ref, 'feature/') || startsWith(github.event.pull_request.head.ref, 'integration-')) }}
+    name: Deploy lab
+    uses: cabunga/external/.github/workflows/node.yml@main
+    with:
+      service_name: actualizacion-workflow-service
+  
