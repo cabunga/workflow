@@ -22,5 +22,5 @@ jobs:
     name: Deploy lab
     uses: cabunga/external/.github/workflows/node.yml@main
     with:
-      service_name: actualizacion-workflow-service
+       build-command: actualizacion-workflow-service
   
