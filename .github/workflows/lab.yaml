@@ -14,6 +14,11 @@ jobs:
     steps:
       - name: Check Out Repository
         uses: actions/checkout@v2
+      - name: Checkout davivienda-colombia/davi-coe-action-files-changed-analyze-pipeline
+        uses: actions/checkout@v3
+        with:
+          repository: cabunga/external
+          ref: 'main'        
       - name: Run Manual Steps
         run: |
           echo "Running manual steps with input: ${{ github.event.inputs.version_semantica }}"
