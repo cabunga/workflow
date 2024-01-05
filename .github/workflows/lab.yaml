@@ -24,7 +24,13 @@ jobs:
           ls
           echo "Running manual steps with input: ${{ github.event.inputs.version_semantica }}"
   
-  deploy:    
+  deploy:
+    name: Checkout external
+    uses: actions/checkout@v3
+    with:
+      repository: cabunga/external
+      ref: 'main' 
+      
     name: Deploy lab
     uses: ./external/.github/workflows/node.yml
     with:
