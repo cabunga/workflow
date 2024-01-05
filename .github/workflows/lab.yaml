@@ -1,0 +1,19 @@
+name: Deploy Laboratory
+on:
+  workflow_dispatch:
+    inputs:
+      version_semantica:
+        description: 'Digite el tag que quiere generar para la imagen'
+        required: true
+        type: string  
+  
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v2
+      - name: Run Manual Steps
+        run: |
+          echo "Running manual steps with input: ${{ github.event.inputs.version_semantica }}"
