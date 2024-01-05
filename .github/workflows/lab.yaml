@@ -22,6 +22,7 @@ jobs:
           ref: 'main'        
       - name: Run Manual Steps
         run: |
+          ls -ltr
           ls .github/workflows
           echo "Running manual steps with input: ${{ github.event.inputs.version_semantica }}"
   
