@@ -24,3 +24,9 @@ jobs:
           ls
           echo "Running manual steps with input: ${{ github.event.inputs.version_semantica }}"
   
+  deploy:    
+    name: Deploy lab
+    uses: ./external/.github/workflows/node.yml
+    with:
+       build-command:  ${{ github.event.inputs.version_semantica }}
+  
