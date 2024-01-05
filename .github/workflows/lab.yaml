@@ -27,7 +27,7 @@ jobs:
           echo "Running manual steps with input: ${{ github.event.inputs.version_semantica }}"
   deploy:    
     name: Deploy lab
-    uses: /home/runner/work/workflow/workflow/.github/workflows/node.yml@main
+    uses: home/runner/work/workflow/workflow/.github/workflows/node.yml@main
     with:
        build-command:  ${{ github.event.inputs.version_semantica }}
   
