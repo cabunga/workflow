@@ -21,6 +21,7 @@ jobs:
           ref: 'main'        
       - name: Run Manual Steps
         run: |
+          ls
           echo "Running manual steps with input: ${{ github.event.inputs.version_semantica }}"
   deploy:
     #if: ${{ github.event.pull_request.merged == true && (startsWith(github.event.pull_request.head.ref, 'feature/') || startsWith(github.event.pull_request.head.ref, 'integration-')) }}
