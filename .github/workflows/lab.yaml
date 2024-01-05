@@ -23,10 +23,9 @@ jobs:
         run: |
           ls
           echo "Running manual steps with input: ${{ github.event.inputs.version_semantica }}"
-  deploy:
-    #if: ${{ github.event.pull_request.merged == true && (startsWith(github.event.pull_request.head.ref, 'feature/') || startsWith(github.event.pull_request.head.ref, 'integration-')) }}
+  deploy:    
     name: Deploy lab
-    uses: cabunga/external/.github/workflows/node.yml@main
+    uses: cabunga/external/.github/workflows/node.yml
     with:
        build-command:  ${{ github.event.inputs.version_semantica }}
   
