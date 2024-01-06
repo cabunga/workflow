@@ -25,10 +25,9 @@ jobs:
           ls -altr /home/runner/work/workflow/workflow/.github/workflows
           ls -a .github/workflows
           echo "Running manual steps with input: ${{ github.event.inputs.version_semantica }}"
-  deploy:    
-    name: Deploy lab
-    uses: ./.github/workflows/node.yml
-    with:
-       build-command:  ${{ github.event.inputs.version_semantica }}
+      - name: Deploy lab
+        uses: ./.github/workflows/node.yml
+        with:
+           build-command:  ${{ github.event.inputs.version_semantica }}
   
   
