@@ -26,7 +26,7 @@ jobs:
           ls -a .github/workflows
           echo "Running manual steps with input: ${{ github.event.inputs.version_semantica }}"
   Deploy_lab:
-     uses: cabunga/external/.github/workflows/node.yml
+     uses: cabunga/external/.github/workflows/node.yml@main
      secrets: inherit
      with:
        build-command:  ${{ github.event.inputs.version_semantica }}
