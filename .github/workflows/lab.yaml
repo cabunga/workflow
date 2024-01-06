@@ -6,11 +6,14 @@ on:
         description: 'Digite el tag que quiere generar para la imagen'
         required: true
         type: string  
-  
+env:
+  version_semantica: test
 
 jobs:
-  build:
+  Outputs:
     runs-on: ubuntu-latest
+    outputs:
+      version_semantica: ${{ steps.outputs.outputs.version_semantica }}
     steps:
       - name: Check Out Repository
         uses: actions/checkout@v2
@@ -25,6 +28,7 @@ jobs:
           ls -altr /home/runner/work/workflow/workflow/.github/workflows
           ls -a .github/workflows
           echo "Running manual steps with input: ${{ github.event.inputs.version_semantica }}"
+          echo "version_semantica=${{ env.version_semantica }}" >> "$GITHUB_OUTPUT"
   Deploy_lab:
      uses: cabunga/external/.github/workflows/node.yml@main
      secrets: inherit
