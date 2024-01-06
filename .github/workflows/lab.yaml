@@ -1,38 +1,86 @@
-name: Deploy Laboratory
-on:
+name: Deploy 
+on: 
   workflow_dispatch:
     inputs:
-      version_semantica:
-        description: 'Digite el tag que quiere generar para la imagen'
+      tag:
+        description: 'Seleccione tag de repositorio de código'
         required: true
-        type: string  
+        type: choice
+        options: [master ]
+      Branch_Helm:
+        description: 'Seleccione Branch de repositorio de Helm'
+        required: true
+        type: choice
+        options: [ release]
+      environment:
+        description: 'Seleccione environment a desplegar'
+        required: true
+        type: choice
+        options: 
+          - 'UAT'
+          - 'PRD'          
+      
+
 env:
-  version_semantica: test
+  PARTITION_OTT: dom
+  PARTITION_IPTV: cdominic
+  PARENT_PARTITION: DOM
+  SERVICE: mfw
 
 jobs:
   Outputs:
+    name: servicio a desplegar
     runs-on: ubuntu-latest
     outputs:
-      version_semantica: ${{ steps.outputs.outputs.version_semantica }}
+      PARTITION_OTT: ${{ steps.outputs.outputs.PARTITION_OTT }}
+      PARTITION_IPTV: ${{ steps.outputs.outputs.PARTITION_IPTV }}
+      PARENT_PARTITION: ${{ steps.outputs.outputs.PARENT_PARTITION }}
+      SERVICE: ${{ steps.outputs.outputs.SERVICE }}
     steps:
-      - name: Check Out Repository
-        uses: actions/checkout@v2
-      - name: Checkout external
-        uses: actions/checkout@v3
-        with:
-          repository: cabunga/external
-          path: ./.github/workflows
-          ref: 'main'        
-      - name: Run Manual Steps
+      - name: se desplegará servicio ${{ env.SERVICE }} en ${{ env.PARENT_PARTITION }}
+        id: outputs
         run: |
-          ls -altr /home/runner/work/workflow/workflow/.github/workflows
-          ls -a .github/workflows
-          echo "Running manual steps with input: ${{ github.event.inputs.version_semantica }}"
-          echo "version_semantica=${{ env.version_semantica }}" >> "$GITHUB_OUTPUT"
-  Deploy_lab:
-     uses: cabunga/external/.github/workflows/node.yml@main
-     secrets: inherit
-     with:
-       build-command:  ${{ github.event.inputs.version_semantica }}
-  
-  
+            if [ "${{ inputs.Silo }}" == "Todos (ott/iptv)" ]; then
+            
+            echo "se desplegará en ${{ inputs.environment }} el servicio ${{ env.SERVICE }} para la partición ${{ env.PARTITION_OTT }} en ott"
+            echo "se desplegará en ${{ inputs.environment }} el servicio ${{ env.SERVICE }} para la partición ${{ env.PARTITION_IPTV }} en iptv"
+            fi
+
+            if [ "${{ inputs.Silo }}" == "ott" ]; then
+              echo "se desplegará en ${{ inputs.environment }} el servicio ${{ env.SERVICE }} para la partición ${{ env.PARTITION_OTT }} en ott"
+            fi
+            
+            if [ "${{ inputs.Silo }}" == "iptv" ]; then
+              echo "se desplegará en ${{ inputs.environment }} el servicio ${{ env.SERVICE }} para la partición ${{ env.PARTITION_IPTV }} en iptv"
+            fi
+
+            # se exportan outputs para usar variables en siguientes jobs del workflow principal
+            echo "PARTITION_OTT=${{ env.PARTITION_OTT }}" >> "$GITHUB_OUTPUT"
+            echo "PARTITION_IPTV=${{ env.PARTITION_IPTV }}" >> "$GITHUB_OUTPUT"
+            echo "PARENT_PARTITION=${{ env.PARENT_PARTITION }}" >> "$GITHUB_OUTPUT"
+            echo "SERVICE=${{ env.SERVICE }}" >> "$GITHUB_OUTPUT"
+
+  #--------------------------------------------------------------
+  #############INICIA CODIGO PARA BUILD Y DEPLOY UAT#############
+  #--------------------------------------------------------------
+  #Construcción imagen solo cuando se selecciona environment UAT y silo 'Todos (ott/iptv)'
+  BUILD-UAT-IPTV-OTT:
+    needs: Outputs
+    name: ${{ matrix.environment }}
+    if: ${{ inputs.environment == 'UAT' }}
+    strategy:
+      matrix:
+        environment: 
+          - uat-aws-us-east-2-${{ needs.Outputs.outputs.PARTITION_OTT }}-${{ needs.Outputs.outputs.SERVICE }}-ott
+          - uat-aws-us-east-2-${{ needs.Outputs.outputs.PARTITION_IPTV }}-${{ needs.Outputs.outputs.SERVICE }}-iptv
+    uses: cabunga/external/.github/workflows/node.yml@main
+    secrets: inherit
+    with:
+      tag: ${{ inputs.tag }}
+      Branch_Helm: ${{ inputs.Branch_Helm }}
+      environment: ${{ matrix.environment }}
+      PARTITION_OTT: ${{ needs.Outputs.outputs.PARTITION_OTT }}
+      PARTITION_IPTV: ${{ needs.Outputs.outputs.PARTITION_IPTV }}
+      PARENT_PARTITION: ${{ needs.Outputs.outputs.PARENT_PARTITION }}
+      SERVICE: ${{ needs.Outputs.outputs.SERVICE }}
+      build-command:  ${{ github.event.inputs.version_semantica }}
