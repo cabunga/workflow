@@ -59,28 +59,5 @@ jobs:
             echo "PARTITION_IPTV=${{ env.PARTITION_IPTV }}" >> "$GITHUB_OUTPUT"
             echo "PARENT_PARTITION=${{ env.PARENT_PARTITION }}" >> "$GITHUB_OUTPUT"
             echo "SERVICE=${{ env.SERVICE }}" >> "$GITHUB_OUTPUT"
+            echo "secre"${{secret.USER}}
 
-  #--------------------------------------------------------------
-  #############INICIA CODIGO PARA BUILD Y DEPLOY UAT#############
-  #--------------------------------------------------------------
-  #Construcción imagen solo cuando se selecciona environment UAT y silo 'Todos (ott/iptv)'
-  BUILD-UAT-IPTV-OTT:
-    needs: Outputs
-    name: ${{ matrix.environment }}
-    if: ${{ inputs.environment == 'UAT' }}
-    strategy:
-      matrix:
-        environment: 
-          - uat-aws-us-east-2-${{ needs.Outputs.outputs.PARTITION_OTT }}-${{ needs.Outputs.outputs.SERVICE }}-ott
-          - uat-aws-us-east-2-${{ needs.Outputs.outputs.PARTITION_IPTV }}-${{ needs.Outputs.outputs.SERVICE }}-iptv
-    uses: cabunga/external/.github/workflows/node.yml@main
-    secrets: inherit
-    with:
-      tag: ${{ inputs.tag }}
-      Branch_Helm: ${{ inputs.Branch_Helm }}
-      environment: ${{ matrix.environment }}
-      PARTITION_OTT: ${{ needs.Outputs.outputs.PARTITION_OTT }}
-      PARTITION_IPTV: ${{ needs.Outputs.outputs.PARTITION_IPTV }}
-      PARENT_PARTITION: ${{ needs.Outputs.outputs.PARENT_PARTITION }}
-      SERVICE: ${{ needs.Outputs.outputs.SERVICE }}
-      build-command:  ${{ github.event.inputs.version_semantica }}
