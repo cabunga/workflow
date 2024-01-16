@@ -26,12 +26,14 @@ env:
   PARTITION_IPTV: cdominic
   PARENT_PARTITION: DOM
   SERVICE: mfw
-  SUser: ${{ secrets.USER }}
+
 
 jobs:
   Outputs:
     name: servicio a desplegar
     runs-on: ubuntu-latest
+    env:
+      SUser: ${{ secrets.USER }}
     environment: develop
     outputs:
       PARTITION_OTT: ${{ steps.outputs.outputs.PARTITION_OTT }}
