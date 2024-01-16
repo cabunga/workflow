@@ -26,6 +26,7 @@ env:
   PARTITION_IPTV: cdominic
   PARENT_PARTITION: DOM
   SERVICE: mfw
+  SUser: ${{ secrets.USER }}
 
 jobs:
   Outputs:
@@ -60,5 +61,5 @@ jobs:
             echo "PARTITION_IPTV=${{ env.PARTITION_IPTV }}" >> "$GITHUB_OUTPUT"
             echo "PARENT_PARTITION=${{ env.PARENT_PARTITION }}" >> "$GITHUB_OUTPUT"
             echo "SERVICE=${{ env.SERVICE }}" >> "$GITHUB_OUTPUT"
-            echo "secret ${{secrets.USER}}"
+            echo "secret $SUser"
 
