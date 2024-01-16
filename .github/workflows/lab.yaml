@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SUser: ${{ secrets.USER }}
-    environment: develop
+
     outputs:
       PARTITION_OTT: ${{ steps.outputs.outputs.PARTITION_OTT }}
       PARTITION_IPTV: ${{ steps.outputs.outputs.PARTITION_IPTV }}
