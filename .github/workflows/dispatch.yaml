@@ -1,4 +1,4 @@
-name: My Workflow
+name: lanzo
 on: workflow_dispatch
 jobs:
   evaluate-actions-consumption:
