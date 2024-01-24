@@ -48,11 +48,7 @@ jobs:
           echo "Combine output files"
           cat stream-diagram.md stats-table.md > issue_view.md
 
-      - name: Publish content to a new GitHub Issue
-        uses: peter-evans/create-issue-from-file@v4
-        with:
-          title: Workflow runs summary `${{ env.REPO_NAME }}` repo (${{ env.START_DATE }} - ${{ env.END_DATE }})
-          content-filepath: issue_view.md
+      
 
       - name: Upload all .txt .csv .md files to artifact
         uses: actions/upload-artifact@v3
